@@ -1,0 +1,32 @@
+name: Deploy Lambda
+
+on:
+  # 자동 배포할 브랜치 설정
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: deploy
+    # ubuntu: github action으로 접근 가능한 가장 저렴한 버전
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: serverless deploy
+        uses: serverless/github-action@v3
+        with:
+          args: deploy
+        env:
+          # SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
+          # or if using AWS credentials directly
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

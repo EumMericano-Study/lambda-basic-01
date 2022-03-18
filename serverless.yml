@@ -1,0 +1,12 @@
+service: lambda-basic-01
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ap-northeast-2
+
+# lambda에 배포할 함수 명시
+functions:
+  hello:
+    handler: src/handler.generateRandomNumber
